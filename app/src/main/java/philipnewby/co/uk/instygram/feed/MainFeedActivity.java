@@ -54,7 +54,7 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
     private static final int COMMENT_REQ_CODE = 3434;
 
     // our feed adapter
-    public static MainFeedAdapter adapter;
+    MainFeedAdapter adapter;
 
     @BindView(R.id.emptyListPlaceholder)
     ImageView emptyPlaceholderImage;
@@ -108,7 +108,7 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
         // if there are no posts
         if (localPostsList == null) {
 
-            ToastUtils.showShort("localPostsList is null");
+            ToastUtils.showShort("localPostsList is null running full query");
 
             // start a query on the Post class
             query = ParseQuery.getQuery(Post.class);
@@ -130,7 +130,7 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
 
         } else {
 
-            ToastUtils.showShort("localPostsList is not null");
+            ToastUtils.showShort("localPostsList is not null fetching objects instead");
 
             ParseObject.fetchAllInBackground(localPostsList, new FindCallback<Post>() {
                 @Override

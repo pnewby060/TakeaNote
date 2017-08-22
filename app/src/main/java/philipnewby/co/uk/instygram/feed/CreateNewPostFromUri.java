@@ -11,9 +11,10 @@ import android.util.Log;
 import com.arasthel.asyncjob.AsyncJob;
 import com.blankj.utilcode.util.ImageUtils;
 import com.blankj.utilcode.util.ToastUtils;
-import com.parse.Parse;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -21,6 +22,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+
+import philipnewby.co.uk.instygram.comment.Comment;
 
 final class CreateNewPostFromUri {
 
@@ -53,8 +56,8 @@ final class CreateNewPostFromUri {
                 try {
 
                     // get a raw bitmap from the uri
-                    imageBitmap = MediaStore.Images.Media.getBitmap(context
-                            .getApplicationContext().getContentResolver(), imageUri);
+                    imageBitmap = MediaStore.Images.Media.getBitmap(context.getApplicationContext().getContentResolver(),
+                            imageUri);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -88,8 +91,11 @@ final class CreateNewPostFromUri {
                         // set the likes to 0
                         post.setLikes(0);
 
-                        // create a null Comment array pointer
+                        // create a null liked posts array pointer
                         post.setLikedPostsArray(Collections.<String>emptyList());
+
+                        // create a null Comment Array
+                        post.setCommentsList(Collections.<Comment>emptyList());
 
                         // create a new parsefile
                         post.setFile(new ParseFile(b));
@@ -113,8 +119,8 @@ final class CreateNewPostFromUri {
                 try {
 
                     // get a raw bitmap from the uri
-                    imageBitmap = MediaStore.Images.Media.getBitmap(context.getApplicationContext
-                            ().getContentResolver(), imageUri);
+                    imageBitmap = MediaStore.Images.Media.getBitmap(context.getApplicationContext().getContentResolver(),
+                            imageUri);
 
                     mutableBitmap = Bitmap.createScaledBitmap(imageBitmap, 300, 300, true);
 
@@ -151,8 +157,10 @@ final class CreateNewPostFromUri {
                                     dialog.dismiss();
 
                                     // alert the user it has saved
-                                    ToastUtils.showLong(ParseUser.getCurrentUser().getUsername
-                                            () + " has created a post on Instant Gram");
+                                    ToastUtils.showLong(ParseUser.getCurrentUser().getUsername() + " has created a post on " +
+                                            "Instant Gram");
+
+                                    activity.recreate();
 
 
                                 } else {
@@ -161,7 +169,6 @@ final class CreateNewPostFromUri {
 
                                 }
 
-                                activity.recreate();
 
 
                             }

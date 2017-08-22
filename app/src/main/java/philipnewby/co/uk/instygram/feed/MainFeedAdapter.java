@@ -127,33 +127,6 @@ public class MainFeedAdapter extends BaseAdapter implements View.OnLongClickList
         // set the likes
         holder.hotCountView.setText(String.valueOf(currentPost.getLikes().intValue()));
 
-        // comment text
-        List<Comment> commentsArray = currentPost.getCommentsList();
-
-        if (commentsArray == null || commentsArray.isEmpty()) {
-            // if no one has commented on this post set the text views to empty
-            holder.commentMain.setText("");
-            holder.commentUsername.setText("");
-        } else {
-
-            int sizeOfArray = commentsArray.size();
-
-            // else get the first comment and retrieve it
-            commentsArray.get(sizeOfArray - 1).fetchIfNeededInBackground(new GetCallback<Comment>() {
-
-                @Override
-                public void done(Comment comment, ParseException e) {
-
-                    // set the comments text to the text view
-                    holder.commentMain.setText(comment.getCommentString());
-                    // set the comments user name to the text view
-                    holder.commentUsername.setText(comment.getCommentedBy());
-
-
-                }
-            });
-        }
-
         // this is fetched all ready
         List<String> likedPostsArray = currentPost.getLikedPostsArray();
 
@@ -180,6 +153,33 @@ public class MainFeedAdapter extends BaseAdapter implements View.OnLongClickList
         // set the values
         holder.username.setText(currentPost.getUsername());
         holder.createdAt.setText(currentPost.getCreatedAtString());
+
+        // comment text
+        List<Comment> commentsArray = currentPost.getCommentsList();
+
+        if (commentsArray == null || commentsArray.isEmpty()) {
+            // if no one has commented on this post set the text views to empty
+            holder.commentMain.setText("");
+            holder.commentUsername.setText("");
+        } else {
+
+            int sizeOfArray = commentsArray.size();
+
+            // else get the first comment and retrieve it
+            commentsArray.get(sizeOfArray - 1).fetchIfNeededInBackground(new GetCallback<Comment>() {
+
+                @Override
+                public void done(Comment comment, ParseException e) {
+
+                    // set the comments text to the text view
+                    holder.commentMain.setText(comment.getCommentString());
+                    // set the comments user name to the text view
+                    holder.commentUsername.setText(comment.getCommentedBy());
+
+
+                }
+            });
+        }
 
         return convertView;
 
