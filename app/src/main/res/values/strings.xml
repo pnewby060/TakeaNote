@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Instant Gram</string>
+    <string name="username_hint_text">username</string>
+    <string name="password_hint_text">password</string>
+    <string name="log_in_button_text">Log in</string>
+    <string name="instagram_logo_content_desc">instagram logo</string>
+    <string name="log_out_button_text">Log out</string>
+    <string name="sign_up_new_account">Sign up</string>
+    <string name="create">Create</string>
+    <string name="forget_password_text">Forget password?</string>
+    <string name="click_here_link_text">Click here</string>
+
+</resources>

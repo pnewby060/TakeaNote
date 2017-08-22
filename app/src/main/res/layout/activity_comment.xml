@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="philipnewby.co.uk.instygram.comment.CommentActivity">
+
+    <ListView
+        android:id="@+id/commentsList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/commentBoxLayout"
+        android:background="@color/white">
+
+    </ListView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/commentBoxLayout"
+        android:background="@color/primary_dark">
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/commentBoxLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/comment_box_user_input"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="10"
+            android:cursorVisible="true"
+            android:hint="Add a comment..."
+            android:inputType="textCapSentences"
+            android:padding="10dp"
+            android:textAppearance="@style/CustomEditTextTheme"
+            android:textColor="#000"
+            android:textCursorDrawable="@null" />
+
+
+        <ImageView
+            android:id="@+id/comment_box_confirm_image_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@color/primary_dark"
+            android:contentDescription="TODO"
+            android:padding="12dp"
+            android:src="@drawable/ic_check_24dp" />
+
+
+    </LinearLayout>
+
+</RelativeLayout>

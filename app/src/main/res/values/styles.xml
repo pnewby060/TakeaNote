@@ -1,0 +1,64 @@
+<resources>
+
+    <!-- Base application theme. -->
+
+    <style name="LoginTheme" parent="AppTheme.Dark">
+        <!-- Main activity theme. -->
+
+    </style>
+
+    <style name="SignUpTheme" parent="AppTheme.Dark">
+        <!-- Main activity theme. -->
+
+    </style>
+
+    <style name="CommentTheme" parent="Theme.AppCompat">
+        <!-- Comment activity theme. -->
+        <item name="windowActionBar">true</item>
+        <item name="colorPrimary">@color/style_color_primary</item>
+        <item name="colorPrimaryDark">@color/style_color_primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+
+        <item name="android:windowBackground">@color/primary</item>
+
+        <item name="colorControlNormal">@color/iron</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+        <item name="android:textColorHint">@color/iron</item>
+
+        <item name="colorButtonNormal">@color/primary_darker</item>
+        <item name="android:colorButtonNormal">@color/primary_darker</item>
+        <item name="android:editTextColor">#000</item>
+    </style>
+
+    <style name="MainFeedTheme" parent="AppTheme.Dark">
+        <!-- Mpostfeed activity theme. -->
+
+
+    </style>
+
+    <!-- Custom edit text theme -->
+    <style name="CustomEditTextTheme" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/md_black_1000</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+
+    <!-- Custom login styles -->
+    <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/style_color_primary</item>
+        <item name="colorPrimaryDark">@color/style_color_primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+
+        <item name="android:windowBackground">@color/primary</item>
+
+        <item name="colorControlNormal">@color/iron</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+        <item name="android:textColorHint">@color/iron</item>
+
+        <item name="colorButtonNormal">@color/primary_darker</item>
+        <item name="android:colorButtonNormal">@color/primary_darker</item>
+    </style>
+
+</resources>

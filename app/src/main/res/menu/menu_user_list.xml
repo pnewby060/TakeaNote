@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/upload_image_menu_item"
+        android:icon="@drawable/ic_image_white_24px"
+        android:orderInCategory="96"
+        android:title="Upload image"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/take_photo_menu_item"
+        android:icon="@drawable/ic_camera_alt_white_24px"
+        android:orderInCategory="97"
+        android:title="Take photo"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/delete_all_menu_item"
+        android:orderInCategory="98"
+        android:title="Delete all posts"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/delete_all_comments_menu_item"
+        android:orderInCategory="98"
+        android:title="Delete all comments"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/show_datastore_values"
+        android:enabled="false"
+        android:orderInCategory="98"
+        android:title="Show datastore values"
+        app:showAsAction="never">
+
+    </item>
+
+    <item
+        android:id="@+id/delete_datastore_values"
+        android:enabled="false"
+        android:orderInCategory="98"
+        android:title="Delete datastore"
+        app:showAsAction="never">
+
+    </item>
+
+    <item
+        android:id="@+id/log_out_menu_item"
+        android:orderInCategory="99"
+        android:title="Log out"
+        app:showAsAction="never">
+
+    </item>
+
+
+</menu>
