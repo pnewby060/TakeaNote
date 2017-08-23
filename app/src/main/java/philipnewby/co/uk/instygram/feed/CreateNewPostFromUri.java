@@ -11,17 +11,14 @@ import android.util.Log;
 import com.arasthel.asyncjob.AsyncJob;
 import com.blankj.utilcode.util.ImageUtils;
 import com.blankj.utilcode.util.ToastUtils;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.List;
 
 import philipnewby.co.uk.instygram.comment.Comment;
 
@@ -160,15 +157,12 @@ final class CreateNewPostFromUri {
                                     ToastUtils.showLong(ParseUser.getCurrentUser().getUsername() + " has created a post on " +
                                             "Instant Gram");
 
-                                    activity.recreate();
-
 
                                 } else {
                                     // log the error
                                     Log.e("Save error", e.getMessage());
 
                                 }
-
 
 
                             }
@@ -178,6 +172,8 @@ final class CreateNewPostFromUri {
             }
         });
     }
+
+
 }
 
 

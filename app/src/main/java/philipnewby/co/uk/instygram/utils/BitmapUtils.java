@@ -4,24 +4,19 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.annotation.NonNull;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Base64;
 
-import com.blankj.utilcode.util.LogUtils;
-import com.squareup.picasso.Picasso;
+import com.arasthel.asyncjob.AsyncJob;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import philipnewby.co.uk.instygram.feed.Post;
 
 public class BitmapUtils {
 
-    public static Bitmap decodeBitmapWithGiveSizeFromResource(Resources res, int resId,
-                                                              int reqWidth, int reqHeight) {
+    public static Bitmap decodeBitmapWithGiveSizeFromResource(Resources res, int resId, int reqWidth, int reqHeight) {
 
         // First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
@@ -36,8 +31,7 @@ public class BitmapUtils {
         return BitmapFactory.decodeResource(res, resId, options);
     }
 
-    public static int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
@@ -50,8 +44,7 @@ public class BitmapUtils {
 
             // Calculate the largest inSampleSize value that is a power of 2 and keeps both
             // height and width larger than the requested height and width.
-            while ((halfHeight / inSampleSize) > reqHeight
-                    && (halfWidth / inSampleSize) > reqWidth) {
+            while ((halfHeight / inSampleSize) > reqHeight && (halfWidth / inSampleSize) > reqWidth) {
                 inSampleSize *= 2;
             }
         }
@@ -122,5 +115,39 @@ public class BitmapUtils {
             return null;
         }
     }
+
+    public static void bitmapToBytes(final Context context, final Uri imageUri) {
+
+        AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
+            @Override
+            public void doOnBackground() {
+
+                Bitmap imageBitmap = null;
+
+                try {
+
+                    // get a raw bitmap from the uri
+                    imageBitmap = MediaStore.Images.Media.getBitmap(context.getApplicationContext().getContentResolver(),
+                            imageUri);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                // compress the post if required
+                assert imageBitmap != null;
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+                imageBitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+
+                final byte[] b = baos.toByteArray();
+
+
+            }
+        });
+
+    }
+
 
 }

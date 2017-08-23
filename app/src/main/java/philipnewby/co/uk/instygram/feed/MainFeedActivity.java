@@ -1,12 +1,16 @@
 package philipnewby.co.uk.instygram.feed;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.arasthel.asyncjob.AsyncJob;
+import com.blankj.utilcode.util.ImageUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.mindorks.butterknifelite.ButterKnifeLite;
@@ -22,10 +28,13 @@ import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -69,6 +78,8 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
     // android nougat requirement for photo
     private File mPhotoFile;
     private ParseQuery<Post> query;
+    private Post post;
+    private ProgressDialog dialog;
 
     public void logLocalPostsListSize(String methodCallingFrom) {
         if (localPostsList != null) LogUtils.d(methodCallingFrom + " -- localPostsList size = " + localPostsList.size());
@@ -147,7 +158,7 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
 
     }
 
-    private void updateAdapterWithData(List<Post> localPostsList) {
+    public void updateAdapterWithData(List<Post> localPostsList) {
 
         if (!localPostsList.isEmpty()) {
 
@@ -503,11 +514,90 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
         if (requestCode == PICK_IMAGE_FROM_MEDIASTORE && resultCode == RESULT_OK && data != null) {
 
             // create a uri from the intent
-            Uri imageUri = data.getData();
+            final Uri imageUri = data.getData();
+
+            logLocalPostsListSize("onActivityResult");
+
+            dialog = new ProgressDialog(MainFeedActivity.this);
+            dialog.setIndeterminate(true);
+            dialog.setMessage("Working ..");
+            dialog.show();
+
+            AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
+                @Override
+                public void doOnBackground() {
+
+                    // get a raw bitmap from the uri
+
+                    final byte[] bytes = bitmapToBytes(imageUri);
+
+                    final String base64 = doPoorQualityAsync(imageUri);
+
+                    AsyncJob.doOnMainThread(new AsyncJob.OnMainThreadJob() {
+                        @Override
+                        public void doInUIThread() {
+
+                            // create a new parse object in the newly created Images class
+                            post = new Post();
+
+                            // save the current user to our pointer of users
+                            post.setParseUserPointer(ParseUser.getCurrentUser());
+
+                            // save the username
+                            post.setUsername(ParseUser.getCurrentUser().getUsername());
+
+                            // set this Post class profile post from the User class
+                            post.setProfileImgFile(post.getUserProfileImageFile());
+
+                            // set the likes to 0
+                            post.setLikes(0);
+
+                            // create a null liked posts array pointer
+                            post.setLikedPostsArray(Collections.<String>emptyList());
+
+                            // create a null Comment Array
+                            post.setCommentsList(Collections.<Comment>emptyList());
+
+                            // create a new parsefile
+                            post.setFile(new ParseFile(bytes));
+
+                            // save the base64 string
+                            post.setPoorImageString(base64);
+
+                            localPostsList.add(post);
+
+                            // save the object in the background
+                            post.saveInBackground(new SaveCallback() {
+
+                                @Override
+                                public void done(ParseException e) {
+
+                                    if (e == null) {
+
+                                        dialog.dismiss();
+
+                                        // alert the user it has saved
+                                        ToastUtils.showLong(ParseUser.getCurrentUser().getUsername() + " has created a post on " +
+                                                "" + "" + "" + "" + "Instant Gram");
+
+                                        recreate();
+
+                                    } else {
+                                        // log the error
+                                        Log.e("Save error", e.getMessage());
+
+                                    }
+
+                                }
+                            });
 
 
-            // convert our uri to a byte array
-            new CreateNewPostFromUri(MainFeedActivity.this).fetchHighAndLowResImages(imageUri);
+                        }
+                    });
+
+                }
+            });
+
 
             // TAKE PHOTO RESULT //
 
@@ -526,7 +616,60 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
             // log the error
             LogUtils.d("Unknown onActivityResult error");
         }
+
+    }
+
+    private byte[] bitmapToBytes(Uri imageUri) {
+
+        Bitmap imageBitmap = null;
+        try {
+
+            imageBitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), imageUri);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // compress the post if required
+        assert imageBitmap != null;
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+
+        return baos.toByteArray();
+    }
+
+    private String doPoorQualityAsync(final Uri imageUri) {
+
+        Bitmap imageBitmap;
+        Bitmap mutableBitmap = null;
+
+        try {
+
+            imageBitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), imageUri);
+
+            mutableBitmap = Bitmap.createScaledBitmap(imageBitmap, 300, 300, true);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // compress the post if required
+        assert mutableBitmap != null;
+
+        ImageUtils.renderScriptBlur(mutableBitmap, 10);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        mutableBitmap.compress(Bitmap.CompressFormat.JPEG, 30, baos);
+
+        final byte[] b = baos.toByteArray();
+
+        return Base64.encodeToString(b, Base64.DEFAULT);
     }
 
 
 }
+
+
