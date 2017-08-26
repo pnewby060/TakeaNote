@@ -41,8 +41,11 @@ public class MainFeedAdapter extends BaseAdapter implements View.OnLongClickList
     private OnCommentListener commentListener;
     private ParseUser mCurrentUser;
 
-    public MainFeedAdapter(Context context, List<Post> postList,
-                           OnCommentListener commentListener, OnHeatAddedListener listener) {
+    public MainFeedAdapter() {
+    }
+
+    public MainFeedAdapter(Context context, List<Post> postList, OnCommentListener commentListener, OnHeatAddedListener
+            listener) {
 
         this.context = context;
         this.postList = postList;
@@ -52,13 +55,13 @@ public class MainFeedAdapter extends BaseAdapter implements View.OnLongClickList
 
     }
 
+    public List<Post> getPostList() {
+        return this.postList;
+    }
+
     public void setPostList(List<Post> posts) {
         this.postList = posts;
         notifyDataSetChanged();
-    }
-
-    public List<Post> getPostList() {
-        return this.postList;
     }
 
     public void addPost(Post postToAdd) {
@@ -96,8 +99,7 @@ public class MainFeedAdapter extends BaseAdapter implements View.OnLongClickList
         } else {
 
             convertView = inflater.inflate(R.layout.single_user_post, parent, false);
-            holder = new ViewHolder(convertView, heatAddedListener, commentListener,
-                    currentPost);
+            holder = new ViewHolder(convertView, heatAddedListener, commentListener, currentPost);
             convertView.setTag(holder);
 
         }
@@ -106,19 +108,14 @@ public class MainFeedAdapter extends BaseAdapter implements View.OnLongClickList
             holder.image.setOnLongClickListener(this);
         }
 
+        holder.image.setTag(position);
+
         // load the posted image
-        Picasso.with(context)
-                .load(currentPost.getFileUrl())
-                .placeholder(ImageUtils.bitmap2Drawable(BitmapUtils.StringToBitMap(currentPost.getPoorImageString())))
-                .fit()
-                .into(holder.image);
+        Picasso.with(context).load(currentPost.getFileUrl()).placeholder(ImageUtils.bitmap2Drawable(BitmapUtils.stringToBitMap
+                (currentPost.getPoorImageString()))).fit().into(holder.image);
 
         // load the profile image
-        Picasso.with(context)
-                .load(currentPost.getProfileImgFile().getUrl())
-                .fit()
-                .centerCrop()
-                .into(holder.iconLetterImage);
+        Picasso.with(context).load(currentPost.getProfileImgFile().getUrl()).fit().centerCrop().into(holder.iconLetterImage);
 
         // this bit of magic sets our position for the comment listener
         holder.commentButtonView.setTag(position);
@@ -187,13 +184,16 @@ public class MainFeedAdapter extends BaseAdapter implements View.OnLongClickList
 
     @Override
     public boolean onLongClick(View view) {
+
+        final SquaredImageView imageView = (SquaredImageView) view;
+
         AlertDialog.Builder dialog = new AlertDialog.Builder(context);
         dialog.setMessage("Delete Post?");
         dialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                final Post currentPost = postList.get(which);
+                final Post currentPost = postList.get((Integer) imageView.getTag());
 
                 // delete online
                 currentPost.deleteInBackground(new DeleteCallback() {
@@ -272,8 +272,9 @@ public class MainFeedAdapter extends BaseAdapter implements View.OnLongClickList
             });
 
             // override the height on the image container to match width
-            userImageContainer.setLayoutParams(new LinearLayout.LayoutParams
-                    (FrameLayout.LayoutParams.MATCH_PARENT, ScreenUtils.getScreenWidth()));
+            userImageContainer.setLayoutParams(new LinearLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, ScreenUtils
+                    .getScreenWidth()));
         }
+
     }
 }
