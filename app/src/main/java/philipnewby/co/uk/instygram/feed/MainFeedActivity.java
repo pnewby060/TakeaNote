@@ -1,5 +1,6 @@
 package philipnewby.co.uk.instygram.feed;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -22,6 +23,8 @@ import com.arasthel.asyncjob.AsyncJob;
 import com.blankj.utilcode.util.ImageUtils;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.github.euzee.permission.PermissionCallback;
+import com.github.euzee.permission.PermissionUtil;
 import com.mindorks.butterknifelite.ButterKnifeLite;
 import com.mindorks.butterknifelite.annotations.BindView;
 import com.parse.DeleteCallback;
@@ -99,12 +102,36 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // check permissions
+        PermissionUtil.checkGroup(this, new PermissionCallback() {
+            @Override
+            public void onPermissionGranted() {
+                ToastUtils.showShort("Yeeeeah fanks!");
+
+                // start main app
+                runOnCreate();
+            }
+
+            @Override
+            public void onPermissionDenied() {
+                ToastUtils.showShort("Bellend!");
+
+                // finsh as cannot run app otherwise
+                finish();
+
+            }
+        }, new String[] { Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE });
+
         // check for if we have come back from the comments activity to get last list position
         if (getIntent().hasExtra(INTENT_EXTRA_LIST_POSITION)) {
             // set list position from intent
             listPositionIntent = getIntent().getIntExtra(INTENT_EXTRA_LIST_POSITION, 0);
         }
 
+
+    }
+
+    private void runOnCreate() {
         setContentView(R.layout.activity_main_feed);
         ButterKnifeLite.bind(this);
 
@@ -112,8 +139,7 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
         setupToolbar();
 
         // init adapter with empty data
-        adapter = new MainFeedAdapter(MainFeedActivity.this, Collections.<Post>emptyList(), MainFeedActivity.this,
-                MainFeedActivity.this);
+        adapter = new MainFeedAdapter(MainFeedActivity.this, Collections.<Post>emptyList(), MainFeedActivity.this, MainFeedActivity.this);
         mainFeedList.setAdapter(adapter);
 
         // if there are no posts
@@ -154,8 +180,6 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
             });
 
         }
-
-
     }
 
     public void updateAdapterWithData(List<Post> localPostsList) {
@@ -577,8 +601,7 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
                                         dialog.dismiss();
 
                                         // alert the user it has saved
-                                        ToastUtils.showLong(ParseUser.getCurrentUser().getUsername() + " has created a post on " +
-                                                "" + "" + "" + "" + "Instant Gram");
+                                        ToastUtils.showLong(ParseUser.getCurrentUser().getUsername() + " has created a post on " + "" + "" + "" + "" + "" + "" + "" + "Instant Gram");
 
                                         recreate();
 
