@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import philipnewby.co.uk.instygram.R;
-import philipnewby.co.uk.instygram.feed.MainFeedActivity;
 import philipnewby.co.uk.instygram.feed.MainFeedAdapter;
 import philipnewby.co.uk.instygram.feed.Post;
 
