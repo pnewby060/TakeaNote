@@ -14,8 +14,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import philipnewby.co.uk.instygram.MainApplication;
 import philipnewby.co.uk.instygram.R;
-import philipnewby.co.uk.instygram.feed.Post;
 
 public class CommentsAdapter extends BaseAdapter {
 
@@ -107,6 +107,9 @@ public class CommentsAdapter extends BaseAdapter {
 
         ViewHolder(View view) {
             ButterKnifeLite.bind(this, view);
+
+            userCommentText.setTypeface(MainApplication.proximaNovaBold);
+            userCommentTime.setTypeface(MainApplication.proximaNovaRegular);
         }
     }
 }
