@@ -1,18 +1,12 @@
 package philipnewby.co.uk.instygram.utils;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Base64;
 
-import com.arasthel.asyncjob.AsyncJob;
-
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 public class BitmapUtils {
 
@@ -105,7 +99,7 @@ public class BitmapUtils {
      * @return bitmap (from given string)
      */
     @Nullable
-    public static Bitmap StringToBitMap(String encodedString) {
+    public static Bitmap stringToBitMap(String encodedString) {
         try {
             byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
@@ -114,39 +108,6 @@ public class BitmapUtils {
             e.getMessage();
             return null;
         }
-    }
-
-    public static void bitmapToBytes(final Context context, final Uri imageUri) {
-
-        AsyncJob.doInBackground(new AsyncJob.OnBackgroundJob() {
-            @Override
-            public void doOnBackground() {
-
-                Bitmap imageBitmap = null;
-
-                try {
-
-                    // get a raw bitmap from the uri
-                    imageBitmap = MediaStore.Images.Media.getBitmap(context.getApplicationContext().getContentResolver(),
-                            imageUri);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                // compress the post if required
-                assert imageBitmap != null;
-
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-                imageBitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
-
-                final byte[] b = baos.toByteArray();
-
-
-            }
-        });
-
     }
 
 
