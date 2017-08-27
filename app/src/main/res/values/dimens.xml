@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="single_feed_username_text_size">18sp</dimen>
+    <dimen name="single_feed_username_text_size">16sp</dimen>
+    <dimen name="single_feed_comment_text_size">16sp</dimen>
     <dimen name="single_feed_date_text_size">16sp</dimen>
     <dimen name="single_comment_time_ago_text_size">14sp</dimen>
 </resources>

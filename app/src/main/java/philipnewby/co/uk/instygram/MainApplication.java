@@ -1,6 +1,7 @@
 package philipnewby.co.uk.instygram;
 
 import android.app.Application;
+import android.graphics.Typeface;
 
 import com.blankj.utilcode.util.Utils;
 import com.parse.Parse;
@@ -17,11 +18,17 @@ import philipnewby.co.uk.instygram.feed.Post;
 public class MainApplication extends Application {
 
     Picasso picasso;
+    public static Typeface proximaNovaRegular;
+    public static Typeface proximaNovaBold;
 
     @Override
     public void onCreate() {
         super.onCreate();
         Utils.init(this);
+
+        // custom typeface what instagram use
+        proximaNovaRegular = Typeface.createFromAsset(getAssets(), "fonts/proximanova-regular-webfont.ttf");
+        proximaNovaBold = Typeface.createFromAsset(getAssets(), "fonts/proximanova-bold-webfont.ttf");
 
         ParseObject.registerSubclass(Post.class);
         ParseObject.registerSubclass(Comment.class);

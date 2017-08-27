@@ -27,6 +27,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import philipnewby.co.uk.instygram.MainApplication;
 import philipnewby.co.uk.instygram.R;
 import philipnewby.co.uk.instygram.comment.Comment;
 import philipnewby.co.uk.instygram.utils.BitmapUtils;
@@ -255,6 +256,11 @@ public class MainFeedAdapter extends BaseAdapter implements View.OnLongClickList
 
         ViewHolder(View view, final OnHeatAddedListener listener, final OnCommentListener commentListener, final Post post) {
             ButterKnifeLite.bind(this, view);
+
+            username.setTypeface(MainApplication.proximaNovaBold);
+            createdAt.setTypeface(MainApplication.proximaNovaRegular);
+            commentUsername.setTypeface(MainApplication.proximaNovaBold);
+            commentMain.setTypeface(MainApplication.proximaNovaRegular);
 
             hotButtonView.setOnClickListener(new View.OnClickListener() {
                 @Override
