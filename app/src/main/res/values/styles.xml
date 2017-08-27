@@ -12,22 +12,10 @@
 
     </style>
 
-    <style name="CommentTheme" parent="Theme.AppCompat">
+    <style name="CommentTheme" parent="Theme.AppCompat.NoActionBar">
         <!-- Comment activity theme. -->
-        <item name="windowActionBar">true</item>
-        <item name="colorPrimary">@color/style_color_primary</item>
-        <item name="colorPrimaryDark">@color/style_color_primary_dark</item>
-        <item name="colorAccent">@color/accent</item>
 
-        <item name="android:windowBackground">@color/primary</item>
-
-        <item name="colorControlNormal">@color/iron</item>
         <item name="colorControlActivated">@color/white</item>
-        <item name="colorControlHighlight">@color/white</item>
-        <item name="android:textColorHint">@color/iron</item>
-
-        <item name="colorButtonNormal">@color/primary_darker</item>
-        <item name="android:colorButtonNormal">@color/primary_darker</item>
         <item name="android:editTextColor">#000</item>
     </style>
 

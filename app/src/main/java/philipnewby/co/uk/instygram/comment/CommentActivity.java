@@ -3,8 +3,12 @@ package philipnewby.co.uk.instygram.comment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.arasthel.asyncjob.AsyncJob;
 import com.blankj.utilcode.util.EmptyUtils;
@@ -31,6 +35,13 @@ public class CommentActivity extends AppCompatActivity {
     public static final String INTENT_EXTRA_LIST_POSITION = "intent_extra_list_position";
     private static final String CREATED_AT = "createdAt";
     public static CommentsAdapter adapter;
+
+    @BindView(R.id.emptyListPlaceholder)
+    ImageView emptyView;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.toolbarTitle)
+    TextView toolbarTitle;
     @BindView(R.id.comment_box_user_input)
     EditText userComment;
     @BindView(R.id.commentsList)
@@ -40,14 +51,23 @@ public class CommentActivity extends AppCompatActivity {
     int listItemPosFromIntent;
     Post post;
 
+    private void setupToolbar() {
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayUseLogoEnabled(false);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            toolbarTitle.setText("Comments");
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_comment);
         ButterKnifeLite.bind(this);
 
-        setTitle("Comments");
+        setupToolbar();
 
         // init adapter with empty data
         commentArrayList = new ArrayList<>();
@@ -74,6 +94,7 @@ public class CommentActivity extends AppCompatActivity {
 
         }
     }
+
 
     // on click
 
@@ -137,7 +158,7 @@ public class CommentActivity extends AppCompatActivity {
 
         } else {
 
-            ToastUtils.showLong("Add a no comments yet image");
+            emptyView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -171,6 +192,8 @@ public class CommentActivity extends AppCompatActivity {
 
                     if (e == null) {
 
+                        emptyView.setVisibility(View.INVISIBLE);
+
                         // add this comment to the comments array in the Post class
                         post.add("commentsArray", comment);
 
@@ -181,8 +204,6 @@ public class CommentActivity extends AppCompatActivity {
 
                         // hide the keyboard
                         KeyboardUtils.hideSoftInput(CommentActivity.this);
-
-                        updateAdapterWithData(commentArrayList);
 
                     } else {
 

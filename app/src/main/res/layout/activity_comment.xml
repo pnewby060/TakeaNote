@@ -5,14 +5,32 @@
     android:layout_height="match_parent"
     tools:context="philipnewby.co.uk.instygram.comment.CommentActivity">
 
+    <!-- our toolbar -->
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <!-- toolbar shadow underneath -->
+    <include layout="@layout/toolbar_shadow" />
+
     <ListView
         android:id="@+id/commentsList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/commentBoxLayout"
+        android:layout_below="@id/toolbar"
         android:background="@color/white">
 
     </ListView>
+
+    <ImageView
+        android:id="@+id/emptyListPlaceholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/commentBoxLayout"
+        android:layout_below="@id/toolbar"
+        android:src="@drawable/empty_list_placeholder"
+        android:visibility="invisible" />
 
     <FrameLayout
         android:layout_width="match_parent"

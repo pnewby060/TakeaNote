@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="#fff"
+    android:minHeight="?attr/actionBarSize"
+    app:popupTheme="@style/Theme.AppCompat.Light"
+    app:theme="@style/ThemeOverlay.AppCompat.Light">
 
-    <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/toolbarTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#fff"
-        android:minHeight="?attr/actionBarSize"
-        app:popupTheme="@style/Theme.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.Light">
+        android:fontFamily="cursive"
+        android:text="Text"
+        android:textAllCaps="false"
+        android:textAppearance="@style/CustomEditTextTheme"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:typeface="serif" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="Instant Gram"
-            android:textAppearance="@style/CustomEditTextTheme"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+</android.support.v7.widget.Toolbar>
 
-    </android.support.v7.widget.Toolbar>
 
-</RelativeLayout>
 
 

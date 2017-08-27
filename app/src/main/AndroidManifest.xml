@@ -42,6 +42,7 @@
         <activity
             android:name=".comment.CommentActivity"
             android:parentActivityName=".feed.MainFeedActivity"
+            android:windowSoftInputMode="adjustUnspecified"
             android:theme="@style/CommentTheme">
 
         </activity>

@@ -2,6 +2,6 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="5dp"
-    android:layout_below="@id/main_feed_toolbar"
+    android:layout_below="@+id/toolbar"
     android:background="@drawable/toolbar_shadow"
     android:translationZ="1dp" />

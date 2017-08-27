@@ -5,22 +5,19 @@
     android:layout_height="match_parent"
     tools:context=".feed.MainFeedActivity">
 
+    <!-- our toolbar -->
     <include
-        android:id="@+id/main_feed_toolbar"
+        android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:layout_below="@id/main_feed_toolbar"
-        android:background="@drawable/toolbar_shadow"
-        android:translationZ="1dp" />
+    <!-- shadow beneath toolbar -->
+    <include layout="@layout/toolbar_shadow" />
 
     <ListView
         android:id="@+id/mainFeedList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/main_feed_toolbar"
+        android:layout_below="@id/toolbar"
         android:layout_centerInParent="true"
         android:background="@color/md_grey_100" />
 
@@ -28,7 +25,7 @@
         android:id="@+id/emptyListPlaceholder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/main_feed_toolbar"
+        android:layout_below="@id/toolbar"
         android:layout_centerInParent="true"
         android:contentDescription="TODO"
         android:scaleType="fitXY"

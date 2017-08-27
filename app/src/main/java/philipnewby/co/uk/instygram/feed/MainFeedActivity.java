@@ -69,6 +69,8 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
     // our feed adapter
     MainFeedAdapter adapter;
 
+    @BindView(R.id.toolbarTitle)
+    TextView toolbarTitle;
     @BindView(R.id.emptyListPlaceholder)
     ImageView emptyPlaceholderImage;
     @BindView(R.id.mainFeedList)
@@ -95,6 +97,7 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayUseLogoEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
+            toolbarTitle.setText("Instant Gram");
         }
 
     }
