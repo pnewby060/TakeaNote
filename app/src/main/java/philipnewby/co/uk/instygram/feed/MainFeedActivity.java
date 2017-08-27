@@ -29,6 +29,7 @@ import com.mindorks.butterknifelite.ButterKnifeLite;
 import com.mindorks.butterknifelite.annotations.BindView;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -106,7 +107,7 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
         PermissionUtil.checkGroup(this, new PermissionCallback() {
             @Override
             public void onPermissionGranted() {
-                ToastUtils.showShort("Yeeeeah fanks!");
+                ToastUtils.showLong("Permissions are granted, thank you!");
 
                 // start main app
                 runOnCreate();
@@ -114,9 +115,9 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
 
             @Override
             public void onPermissionDenied() {
-                ToastUtils.showShort("Bellend!");
+                ToastUtils.showShort("I cant run the app if you don't set the permissions!");
 
-                // finsh as cannot run app otherwise
+                // finish as cannot run app otherwise
                 finish();
 
             }
@@ -127,7 +128,6 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
             // set list position from intent
             listPositionIntent = getIntent().getIntExtra(INTENT_EXTRA_LIST_POSITION, 0);
         }
-
 
     }
 
@@ -144,8 +144,6 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
 
         // if there are no posts
         if (localPostsList == null) {
-
-            ToastUtils.showShort("localPostsList is null running full query");
 
             // start a query on the Post class
             query = ParseQuery.getQuery(Post.class);
@@ -166,8 +164,6 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
             });
 
         } else {
-
-            ToastUtils.showShort("localPostsList is not null fetching objects instead");
 
             ParseObject.fetchAllInBackground(localPostsList, new FindCallback<Post>() {
                 @Override
@@ -298,6 +294,7 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.menu_user_list, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -306,6 +303,22 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
+
+            // show current logged in user
+            case R.id.show_user_menu_item:
+
+                ParseUser.getCurrentUser().fetchIfNeededInBackground(new GetCallback<ParseUser>() {
+                    @Override
+                    public void done(ParseUser user, ParseException e) {
+                        if (e != null) {
+                            LogUtils.d(e.getMessage());
+                        }
+
+                        ToastUtils.showLong(user.getUsername());
+                    }
+                });
+
+                return true;
 
             // delete data store
             case R.id.delete_datastore_values:
