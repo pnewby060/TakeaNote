@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +17,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.ImageUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.mindorks.butterknifelite.ButterKnifeLite;
 import com.mindorks.butterknifelite.annotations.BindView;
@@ -23,12 +26,14 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import philipnewby.co.uk.instygram.R;
 import philipnewby.co.uk.instygram.login.LoginActivity;
@@ -49,7 +54,12 @@ public class SignUpActivity extends AppCompatActivity {
     @BindView(R.id.logInSwitch)
     TextView logInSwitchView;
     @BindView(R.id.profileImage)
-    RoundedImageView profileImage;
+    RoundedImageView roundedImageView;
+
+    private Uri chosenImageUri;
+    private boolean hasSetImage;
+    private String finalBase64Image;
+    private byte[] bytes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +67,15 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
         ButterKnifeLite.bind(this);
 
+        hasSetImage = false;
 
     }
 
+    /**
+     * Our image button to set an image to the user
+     *
+     * @param view the ImageButton that was clicked
+     */
     public void onChangeProfileImage(View view) {
 
         pickImage();
@@ -67,8 +83,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void pickImage() {
-        Intent imageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media
-                .EXTERNAL_CONTENT_URI);
+        Intent imageIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         if (imageIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(imageIntent, PICK_IMAGE_FROM_MEDIASTORE);
         }
@@ -83,27 +98,32 @@ public class SignUpActivity extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_FROM_MEDIASTORE && resultCode == RESULT_OK && data != null) {
 
             // create a uri from the intent
-            final Uri imageUri = data.getData();
+            chosenImageUri = data.getData();
 
-            Picasso.with(this)
-                    .load(imageUri)
-                    .resize(320, 320)
-                    .centerCrop()
-                    .into(profileImage, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                            Toast.makeText(SignUpActivity.this, "Cool photo!",
-                                    Toast.LENGTH_SHORT).show();
+            try {
+                // launch our AsyncTask
+                bytes = new BitmapToByteArray().execute(chosenImageUri).get();
 
-                            // launch our AsyncTask
-                            new BitmapToByteArray().execute(imageUri);
-                        }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
 
-                        @Override
-                        public void onError() {
-                            Log.d("SignupActivity", "Error loading image");
-                        }
-                    });
+            Picasso.with(this).load(chosenImageUri).resize(320, 320).centerCrop().into(roundedImageView, new Callback() {
+                @Override
+                public void onSuccess() {
+                    ToastUtils.showShort("Cool photo!");
+                    hasSetImage = true;
+
+                }
+
+                @Override
+                public void onError() {
+                    Log.d("SignupActivity", "Error loading image");
+                    hasSetImage = false;
+                }
+            });
 
 
         }
@@ -112,23 +132,33 @@ public class SignUpActivity extends AppCompatActivity {
     public void onCreateUser(View view) {
 
         // the username text field
-        String usernameInput = username.getText().toString();
+        final String usernameInput = username.getText().toString();
 
         // the password text field
-        String passwordInput = password.getText().toString();
+        final String passwordInput = password.getText().toString();
 
         // the profile image
-        Boolean hasSetImage = file != null;
+        Boolean hasSetImage = this.hasSetImage;
 
         // check for empty user inputs first
         if (fieldsAreEmpty(usernameInput, passwordInput, hasSetImage)) {
-            Toast.makeText(this, "You must enter something in username or password and also set" +
-                            " a profile image",
-                    Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "You must enter something in username or password and also set" + " a profile image", Toast
+                    .LENGTH_LONG).show();
         } else {
 
-            // check the input against the database for log in
-            checkCredentials(usernameInput, passwordInput);
+            // create a file in parse from the byte array
+            file = new ParseFile(bytes);
+
+            file.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+
+                    // check the input against the database for log in
+                    checkCredentials(usernameInput, passwordInput);
+                }
+            });
+
+
         }
     }
 
@@ -138,6 +168,7 @@ public class SignUpActivity extends AppCompatActivity {
         newUser.setUsername(usernameInput);
         newUser.setPassword(passwordInput);
         newUser.put("profileImage", file);
+        newUser.put("profileImageString", finalBase64Image);
         newUser.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {
@@ -145,8 +176,7 @@ public class SignUpActivity extends AppCompatActivity {
                 if (e == null) {
 
                     // welcome the new user
-                    Toast.makeText(SignUpActivity.this, "Welcome",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignUpActivity.this, "Welcome", Toast.LENGTH_SHORT).show();
 
                     ParseUser.logInInBackground(usernameInput, passwordInput, new LogInCallback() {
                         @Override
@@ -154,8 +184,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                             if (e == null) {
 
-                                Intent intent = new Intent(SignUpActivity.this, LoginActivity
-                                        .class);
+                                Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
                                 // start the login activity with this new user
@@ -163,15 +192,11 @@ public class SignUpActivity extends AppCompatActivity {
                                 finish();
 
 
-                            } else
-                                Toast.makeText(SignUpActivity.this, e.getMessage(),
-                                        Toast.LENGTH_LONG).show();
+                            } else Toast.makeText(SignUpActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
 
-                } else
-                    Toast.makeText(SignUpActivity.this, e.getMessage(),
-                            Toast.LENGTH_LONG).show();
+                } else Toast.makeText(SignUpActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -205,6 +230,56 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
+    class BitmapToBase64 extends AsyncTask<Uri, Void, String> {
+
+        @Override
+        protected String doInBackground(Uri... uris) {
+
+            Uri imageUri = uris[0];
+            Bitmap imageBitmap;
+            Bitmap mutableBitmap = null;
+
+            try {
+
+                // get a raw bitmap from the uri
+                imageBitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), imageUri);
+
+                // create a scaled bitmap
+                mutableBitmap = Bitmap.createScaledBitmap(imageBitmap, 100, 100, true);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            assert mutableBitmap != null;
+
+            // create a renderscript bitmap
+            ImageUtils.renderScriptBlur(mutableBitmap, 10);
+
+            // create a new byte array output stream
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+            // compress the image if required
+            mutableBitmap.compress(Bitmap.CompressFormat.JPEG, 30, bos);
+
+            // byte array from the output stream
+            final byte[] bytes = bos.toByteArray();
+
+            // convert to Base64
+
+            // return a new byte array from the output stream
+            return Base64.encodeToString(bytes, Base64.DEFAULT);
+        }
+
+        @Override
+        protected void onPostExecute(String base64Image) {
+
+            finalBase64Image = base64Image;
+        }
+
+
+    }
+
     class BitmapToByteArray extends AsyncTask<Uri, Void, byte[]> {
 
         @Override
@@ -216,8 +291,7 @@ public class SignUpActivity extends AppCompatActivity {
             try {
 
                 // get a raw bitmap from the uri
-                imageBitmap = MediaStore.Images.Media.getBitmap(getApplicationContext()
-                        .getContentResolver(), imageUri);
+                imageBitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), imageUri);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -237,10 +311,18 @@ public class SignUpActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(byte[] byteArray) {
 
-            // create a file in parse from the byte array
-            file = new ParseFile(byteArray);
+            bytes = byteArray;
 
-            file.saveInBackground();
+            // launch our blurred AsyncTask
+            try {
+                finalBase64Image = new BitmapToBase64().execute(chosenImageUri).get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+
+
         }
 
 
