@@ -91,7 +91,7 @@ public class CommentsAdapter extends BaseAdapter {
         // set the comment
         holder.userCommentText.setText(currentPostComment.getCommentString());
 
-        /*holder.userCommentTime.setText(currentPostComment.getCreatedAt().toString());*/
+        holder.userCommentTime.setText(currentPostComment.getCreatedAtString());
 
         return convertView;
     }

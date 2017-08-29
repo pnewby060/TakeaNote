@@ -2,6 +2,7 @@
 <resources>
     <dimen name="single_feed_username_text_size">16sp</dimen>
     <dimen name="single_feed_comment_text_size">16sp</dimen>
+    <dimen name="single_feed_comment_createdat_text_size">12sp</dimen>
     <dimen name="single_feed_date_text_size">16sp</dimen>
     <dimen name="single_comment_time_ago_text_size">14sp</dimen>
 </resources>

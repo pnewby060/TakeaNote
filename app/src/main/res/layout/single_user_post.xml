@@ -156,7 +156,6 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp"
                 android:gravity="center"
-                android:paddingBottom="10dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="5dp"
                 android:paddingTop="10dp"
@@ -170,10 +169,37 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:paddingTop="10dp"
                 android:text="comment here"
                 android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
                 android:textColor="@color/md_black_1000"
                 android:textSize="@dimen/single_feed_comment_text_size" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/comment_created"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:paddingEnd="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="10dp"
+                android:paddingStart="20dp"
+                android:text="2 days ago"
+                android:textAllCaps="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Inverse"
+                android:textColor="@color/md_grey_500"
+                android:textSize="@dimen/single_feed_comment_createdat_text_size" />
 
 
         </LinearLayout>

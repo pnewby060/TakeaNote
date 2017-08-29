@@ -7,14 +7,11 @@ import com.blankj.utilcode.util.TimeUtils;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.util.Date;
 
 import philipnewby.co.uk.instygram.feed.Post;
-
-import static philipnewby.co.uk.instygram.feed.Post.CREATED_AT;
 
 @ParseClassName("Comment")
 public class Comment extends Post {
@@ -24,6 +21,7 @@ public class Comment extends Post {
     private static final String POST_POINTER = "post";
 
     // fields
+    private static final String CREATED_AT = "createdAt";
     private static final String COMMENT = "comment";
     private static final String COMMENTED_BY = "commentedBy";
     private static final String PROFILE_IMAGE = "profileImage";
@@ -83,7 +81,7 @@ public class Comment extends Post {
         String createdAt = "";
 
         // get the time in millis for the created at
-        long createdDate = getDateCreatedAt().getTime();
+        long createdDate = getCreatedAt().getTime();
 
         // get the time in millis for now
         long currentDate = new Date().getTime();

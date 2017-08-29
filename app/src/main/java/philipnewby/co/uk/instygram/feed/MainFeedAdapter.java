@@ -160,6 +160,7 @@ public class MainFeedAdapter extends BaseAdapter implements View.OnLongClickList
             // if no one has commented on this post set the text views to empty
             holder.commentMain.setText("");
             holder.commentUsername.setText("");
+            holder.commentCreatedAt.setText("");
         } else {
 
             int sizeOfArray = commentsArray.size();
@@ -174,6 +175,8 @@ public class MainFeedAdapter extends BaseAdapter implements View.OnLongClickList
                     holder.commentMain.setText(comment.getCommentString());
                     // set the comments user name to the text view
                     holder.commentUsername.setText(comment.getCommentedBy());
+                    // set the comments created at to the text view
+                    holder.commentCreatedAt.setText(comment.getCreatedAtString());
 
 
                 }
@@ -251,6 +254,8 @@ public class MainFeedAdapter extends BaseAdapter implements View.OnLongClickList
         TextView commentUsername;
         @BindView(R.id.comment_main)
         TextView commentMain;
+        @BindView(R.id.comment_created)
+        TextView commentCreatedAt;
         @BindView(R.id.hotCountText)
         TextView hotCountView;
 
@@ -262,6 +267,7 @@ public class MainFeedAdapter extends BaseAdapter implements View.OnLongClickList
             createdAt.setTypeface(MainApplication.proximaNovaRegular);
             commentUsername.setTypeface(MainApplication.proximaNovaBold);
             commentMain.setTypeface(MainApplication.proximaNovaRegular);
+            commentCreatedAt.setTypeface(MainApplication.proximaNovaRegular);
 
             hotButtonView.setOnClickListener(new View.OnClickListener() {
                 @Override

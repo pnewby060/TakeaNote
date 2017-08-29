@@ -10,9 +10,6 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
-    <!-- toolbar shadow underneath -->
-    <include layout="@layout/toolbar_shadow" />
-
     <ListView
         android:id="@+id/commentsList"
         android:layout_width="match_parent"
@@ -31,6 +28,9 @@
         android:layout_below="@id/toolbar"
         android:src="@drawable/empty_list_placeholder"
         android:visibility="invisible" />
+
+    <!-- toolbar shadow underneath -->
+    <include layout="@layout/toolbar_shadow" />
 
     <FrameLayout
         android:layout_width="match_parent"

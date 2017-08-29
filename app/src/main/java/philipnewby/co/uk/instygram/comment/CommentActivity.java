@@ -26,6 +26,7 @@ import com.parse.SaveCallback;
 import java.util.ArrayList;
 import java.util.List;
 
+import philipnewby.co.uk.instygram.MainApplication;
 import philipnewby.co.uk.instygram.R;
 import philipnewby.co.uk.instygram.feed.MainFeedAdapter;
 import philipnewby.co.uk.instygram.feed.Post;
@@ -56,6 +57,7 @@ public class CommentActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayUseLogoEnabled(false);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
+            toolbarTitle.setTypeface(MainApplication.richardM);
             toolbarTitle.setText("Comments");
         }
     }
@@ -182,15 +184,15 @@ public class CommentActivity extends AppCompatActivity {
             // set the post from the intent as the post pointer
             comment.setCommentedPostByUser(post);
 
-            // add locally
-            adapter.addComment(comment);
-
             // save on network
             comment.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
 
                     if (e == null) {
+
+                        // add locally
+                        adapter.addComment(comment);
 
                         // a comment has been made so remove the empty view
                         emptyView.setVisibility(View.INVISIBLE);

@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -88,7 +89,7 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
     private Post post;
     private ProgressDialog dialog;
 
-    public void logLocalPostsListSize(String methodCallingFrom) {
+    private void logLocalPostsListSize(@NonNull String methodCallingFrom) {
         if (localPostsList != null) LogUtils.d(methodCallingFrom + " -- localPostsList size = " + localPostsList.size());
 
     }
@@ -98,6 +99,7 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayUseLogoEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
+            toolbar.setOverflowIcon((getResources().getDrawable(R.drawable.ic_overflow)));
             toolbarTitle.setTypeface(MainApplication.richardM);
             toolbarTitle.setText("Instantgram");
         }
@@ -144,7 +146,8 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
         setupToolbar();
 
         // init adapter with empty data
-        adapter = new MainFeedAdapter(MainFeedActivity.this, Collections.<Post>emptyList(), MainFeedActivity.this, MainFeedActivity.this);
+        adapter = new MainFeedAdapter(MainFeedActivity.this, Collections.<Post>emptyList(), MainFeedActivity.this,
+                MainFeedActivity.this);
         mainFeedList.setAdapter(adapter);
 
         // if there are no posts
@@ -299,7 +302,6 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-
         getMenuInflater().inflate(R.menu.menu_user_list, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -619,7 +621,8 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
                                         dialog.dismiss();
 
                                         // alert the user it has saved
-                                        ToastUtils.showLong(ParseUser.getCurrentUser().getUsername() + " has created a post on " + "" + "" + "" + "" + "" + "" + "" + "Instant Gram");
+                                        ToastUtils.showLong(ParseUser.getCurrentUser().getUsername() + " has created a post on " +
+                                                "" + "" + "" + "" + "" + "" + "" + "" + "" + "Instant Gram");
 
                                         recreate();
 
