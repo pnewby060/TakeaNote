@@ -10,9 +10,6 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
-    <!-- shadow beneath toolbar -->
-    <include layout="@layout/toolbar_shadow" />
-
     <ListView
         android:id="@+id/mainFeedList"
         android:layout_width="match_parent"
@@ -31,6 +28,9 @@
         android:scaleType="fitXY"
         android:src="@drawable/empty_list_placeholder"
         android:visibility="invisible" />
+
+    <!-- shadow beneath toolbar (keep this at bottom so it shows -->
+    <include layout="@layout/toolbar_shadow" />
 
 
 </RelativeLayout>
