@@ -93,6 +93,7 @@ public class MainFeedAdapter extends BaseAdapter implements View.OnLongClickList
         // get current item to be displayed
         final Post currentPost = postList.get(position);
 
+
         // inflate the layout for each list row
         if (convertView != null) {
             holder = (ViewHolder) convertView.getTag();

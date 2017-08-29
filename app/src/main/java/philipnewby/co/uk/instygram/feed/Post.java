@@ -29,7 +29,7 @@ public class Post extends ParseObject {
     private static final String POST_POOR_IMAGE_STRING = "poorImageString";
     private static final String POST_POOR_IMAGE_FILE = "poorImage";
     private static final String POST_PROFILE_IMAGE = "profImg";
-    private static final String POST_PROFILE_IMAGE_STRING = "profImgString";
+    private static final String POST_PROFILE_IMAGE_STRING = "profImageString";
     private static final String USER_PROFILE_IMAGE = "profileImage";
     private static final String COMMENTS_ARRAY = "commentsArray";
     private static final String IMAGE_BYTE_ARRAY = "imageByteArray";
@@ -84,39 +84,32 @@ public class Post extends ParseObject {
         // get the time in millis for now
         long currentDate = new Date().getTime();
 
-        int secondsBetween = (int) TimeUtils.getTimeSpan(createdDate, currentDate, TimeConstants
-                .SEC);
+        int secondsBetween = (int) TimeUtils.getTimeSpan(createdDate, currentDate, TimeConstants.SEC);
 
         // get the number of minutes in between
-        int minutesBetween = (int) TimeUtils.getTimeSpan(createdDate, currentDate, TimeConstants
-                .MIN);
+        int minutesBetween = (int) TimeUtils.getTimeSpan(createdDate, currentDate, TimeConstants.MIN);
 
         // get the number of hours in between
-        int hoursBetween = (int) TimeUtils.getTimeSpan(createdDate, currentDate, TimeConstants
-                .HOUR);
+        int hoursBetween = (int) TimeUtils.getTimeSpan(createdDate, currentDate, TimeConstants.HOUR);
 
         // if less than 1 minute ago return "minutes ago
         if (secondsBetween < 60) {
-            createdAt = DateUtils.getRelativeTimeSpanString(createdDate, currentDate, DateUtils
-                    .SECOND_IN_MILLIS).toString();
+            createdAt = DateUtils.getRelativeTimeSpanString(createdDate, currentDate, DateUtils.SECOND_IN_MILLIS).toString();
         }
 
         // if less than 1 hour ago return "minutes ago
         if (minutesBetween >= 1 && minutesBetween < 60) {
-            createdAt = DateUtils.getRelativeTimeSpanString(createdDate, currentDate, DateUtils
-                    .MINUTE_IN_MILLIS).toString();
+            createdAt = DateUtils.getRelativeTimeSpanString(createdDate, currentDate, DateUtils.MINUTE_IN_MILLIS).toString();
         }
 
         // if less than 24 hours ago or greater than 1 return "hours ago"
         if (hoursBetween >= 1 && hoursBetween < 24) {
-            createdAt = DateUtils.getRelativeTimeSpanString(createdDate, currentDate, DateUtils
-                    .HOUR_IN_MILLIS).toString();
+            createdAt = DateUtils.getRelativeTimeSpanString(createdDate, currentDate, DateUtils.HOUR_IN_MILLIS).toString();
         }
 
         // if more than 24 hours ago return "days ago"
         if (hoursBetween >= 24) {
-            createdAt = DateUtils.getRelativeTimeSpanString(createdDate, currentDate, DateUtils
-                    .DAY_IN_MILLIS).toString();
+            createdAt = DateUtils.getRelativeTimeSpanString(createdDate, currentDate, DateUtils.DAY_IN_MILLIS).toString();
         }
 
         return createdAt;
@@ -199,11 +192,26 @@ public class Post extends ParseObject {
         put(POST_POOR_IMAGE_STRING, base64);
     }
 
-    public String getProfImageString() {
-        return getString(POST_PROFILE_IMAGE_STRING);
+
+    public String getUserProfImageString() {
+
+        String s = "";
+
+        try {
+
+            ParseUser user = getParseUserPointer().fetch();
+
+            s = user.getString("profileImageString");
+
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return s;
     }
 
-    public void setProfImageString(String base64) {
+    public void setUserProfImageString(String base64) {
         put(POST_PROFILE_IMAGE_STRING, base64);
     }
 
@@ -223,7 +231,9 @@ public class Post extends ParseObject {
         return getList(COMMENTS_ARRAY);
     }
 
-    public void setCommentsList(List<Comment> commentsList) { put(COMMENTS_ARRAY, commentsList); }
+    public void setCommentsList(List<Comment> commentsList) {
+        put(COMMENTS_ARRAY, commentsList);
+    }
 
     //
     // liked posts

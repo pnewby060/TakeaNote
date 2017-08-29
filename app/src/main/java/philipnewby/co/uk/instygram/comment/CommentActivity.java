@@ -192,6 +192,7 @@ public class CommentActivity extends AppCompatActivity {
 
                     if (e == null) {
 
+                        // a comment has been made so remove the empty view
                         emptyView.setVisibility(View.INVISIBLE);
 
                         // add this comment to the comments array in the Post class

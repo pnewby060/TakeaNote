@@ -20,6 +20,7 @@ public class MainApplication extends Application {
     Picasso picasso;
     public static Typeface proximaNovaRegular;
     public static Typeface proximaNovaBold;
+    public static Typeface richardM;
 
     @Override
     public void onCreate() {
@@ -29,6 +30,7 @@ public class MainApplication extends Application {
         // custom typeface what instagram use
         proximaNovaRegular = Typeface.createFromAsset(getAssets(), "fonts/proximanova-regular-webfont.ttf");
         proximaNovaBold = Typeface.createFromAsset(getAssets(), "fonts/proximanova-bold-webfont.ttf");
+        richardM = Typeface.createFromAsset(getAssets(), "fonts/richardm.ttf");
 
         ParseObject.registerSubclass(Post.class);
         ParseObject.registerSubclass(Comment.class);

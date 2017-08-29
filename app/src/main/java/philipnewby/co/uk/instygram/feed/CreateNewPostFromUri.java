@@ -29,6 +29,7 @@ final class CreateNewPostFromUri {
     private MainFeedActivity activity;
     private Post post;
     private ProgressDialog dialog;
+    private String base64;
 
     CreateNewPostFromUri(Context context) {
         this.context = context;
@@ -52,11 +53,15 @@ final class CreateNewPostFromUri {
 
                 try {
 
+                    base64 = ParseUser.getCurrentUser().fetch().getString("profileImageString");
+
                     // get a raw bitmap from the uri
                     imageBitmap = MediaStore.Images.Media.getBitmap(context.getApplicationContext().getContentResolver(),
                             imageUri);
 
                 } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ParseException e) {
                     e.printStackTrace();
                 }
 

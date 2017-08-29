@@ -48,6 +48,7 @@ import java.util.List;
 import java.util.Locale;
 
 import philipnewby.co.uk.instygram.Constants;
+import philipnewby.co.uk.instygram.MainApplication;
 import philipnewby.co.uk.instygram.R;
 import philipnewby.co.uk.instygram.comment.Comment;
 import philipnewby.co.uk.instygram.comment.CommentActivity;
@@ -97,7 +98,8 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayUseLogoEnabled(true);
             getSupportActionBar().setDisplayShowTitleEnabled(false);
-            toolbarTitle.setText("Instant Gram");
+            toolbarTitle.setTypeface(MainApplication.richardM);
+            toolbarTitle.setText("Instantgram");
         }
 
     }
