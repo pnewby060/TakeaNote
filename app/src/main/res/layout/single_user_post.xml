@@ -59,6 +59,16 @@
         android:layout_height="350dp"
         android:minHeight="350dp">
 
+        <!-- put this view first then any view after it will go on top -->
+        <philipnewby.co.uk.instygram.view.SquaredImageView
+            android:id="@+id/userImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/style_color_primary_dark"
+            android:scaleType="fitXY" />
+
         <TextView
             android:id="@+id/hotCountText"
             android:layout_width="wrap_content"
@@ -68,8 +78,8 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignTop="@+id/hotCountButton"
+            android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
-            android:elevation="1dp"
             android:gravity="center"
             android:padding="6dp"
             android:text="+5"
@@ -84,20 +94,11 @@
             android:layout_toLeftOf="@+id/hotCountText"
             android:layout_toStartOf="@+id/hotCountText"
             android:background="@android:color/transparent"
-            android:contentDescription="TODO"
-            android:elevation="1dp"
+            android:contentDescription="@string/heart"
             android:padding="12dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_heart_red"
             tools:targetApi="lollipop" />
-
-
-        <philipnewby.co.uk.instygram.view.SquaredImageView
-            android:id="@+id/userImage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/style_color_primary_dark"
-            android:scaleType="fitXY" />
 
 
     </RelativeLayout>
