@@ -3,6 +3,7 @@ package philipnewby.co.uk.instygram.feed;
 import android.text.format.DateUtils;
 
 import com.blankj.utilcode.constant.TimeConstants;
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.TimeUtils;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
@@ -44,7 +45,7 @@ public class Post extends ParseObject {
     // ParseUser /////////////////////////////////////////////////////////////////////
     //
 
-    public ParseUser getParseUserPointer() {
+    public ParseUser getThisPostsUser() {
         return getParseUser(USER_POINTER);
     }
 
@@ -163,7 +164,7 @@ public class Post extends ParseObject {
         ParseFile file = null;
 
         try {
-            file = getParseUserPointer().fetchIfNeeded().getParseFile(USER_PROFILE_IMAGE);
+            file = getThisPostsUser().fetchIfNeeded().getParseFile(USER_PROFILE_IMAGE);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -193,16 +194,15 @@ public class Post extends ParseObject {
     }
 
 
-    public String getUserProfImageString() {
+    public ParseObject getUserProfImageString() {
 
-        String s = "";
+        ParseObject s = null;
 
         try {
 
-            ParseUser user = getParseUserPointer().fetch();
+            s = ParseObject.create(getThisPostsUser().fetch().getString("profileImageString"));
 
-            s = user.getString("profileImageString");
-
+            LogUtils.d(s.toString());
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -211,7 +211,7 @@ public class Post extends ParseObject {
         return s;
     }
 
-    public void setUserProfImageString(String base64) {
+    public void setProfImageString(ParseObject base64) {
         put(POST_PROFILE_IMAGE_STRING, base64);
     }
 

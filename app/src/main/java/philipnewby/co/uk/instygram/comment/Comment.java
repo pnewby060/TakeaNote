@@ -35,7 +35,7 @@ public class Comment extends Post {
     // USER_POINTER  /////////////////////////////////////////////////////////////////
     //
 
-    public ParseUser getParseUserPointer() {
+    public ParseUser getThisPostsUser() {
         return getParseUser(USER_POINTER);
     }
 
@@ -53,7 +53,7 @@ public class Comment extends Post {
         ParseFile file = null;
 
         try {
-            file = getParseUserPointer().fetchIfNeeded().getParseFile(PROFILE_IMAGE);
+            file = getThisPostsUser().fetchIfNeeded().getParseFile(PROFILE_IMAGE);
         } catch (ParseException e) {
             e.printStackTrace();
         }

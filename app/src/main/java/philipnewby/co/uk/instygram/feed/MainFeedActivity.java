@@ -81,6 +81,7 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
     Toolbar toolbar;
     String mCurrentPhotoPath;
     List<Post> localPostsList;
+    List<String> profileImages;
     // the position in adapter the focus will return on
     private int listPositionIntent;
     // android nougat requirement for photo
@@ -114,7 +115,6 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
         PermissionUtil.checkGroup(this, new PermissionCallback() {
             @Override
             public void onPermissionGranted() {
-                ToastUtils.showLong("Permissions are granted, thank you!");
 
                 // start main app
                 runOnCreate();
@@ -184,6 +184,17 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
             });
 
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+
+
     }
 
     public void updateAdapterWithData(List<Post> localPostsList) {
@@ -460,6 +471,27 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
 
                 return true;
 
+            // delete all mPosts from local and parse
+            case R.id.delete_all_comments_arraylist_menu_item:
+                ParseQuery<Post> c = ParseQuery.getQuery(Post.class);
+
+                c.selectKeys(Collections.singleton("commentsArray"));
+
+                c.findInBackground(new FindCallback<Post>() {
+                    @Override
+                    public void done(List<Post> commentsArrays, ParseException e) {
+
+                        int count = 1;
+                        for (Post singleCommentArray : commentsArrays) {
+                            singleCommentArray.setCommentsList(Collections.<Comment>emptyList());
+                            LogUtils.d("Post Number " + count + " has " + singleCommentArray.getCommentsList().size());
+                            count++;
+                        }
+                    }
+                });
+
+                return true;
+
             // upload an image from the gallery
             case R.id.upload_image_menu_item:
 
@@ -621,8 +653,7 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
                                         dialog.dismiss();
 
                                         // alert the user it has saved
-                                        ToastUtils.showLong(ParseUser.getCurrentUser().getUsername() + " has created a post on " +
-                                                "" + "" + "" + "" + "" + "" + "" + "" + "" + "Instant Gram");
+                                        ToastUtils.showLong(ParseUser.getCurrentUser().getUsername() + " has created a post on " + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "Instant Gram");
 
                                         recreate();
 

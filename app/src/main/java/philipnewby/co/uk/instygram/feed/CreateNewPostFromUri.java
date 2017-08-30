@@ -90,6 +90,9 @@ final class CreateNewPostFromUri {
                         // set this Post class profile post from the User class
                         post.setProfileImgFile(post.getUserProfileImageFile());
 
+                        // set this Post class profile post from the User class
+                        post.setProfImageString(post.getUserProfImageString());
+
                         // set the likes to 0
                         post.setLikes(0);
 

@@ -10,6 +10,7 @@ import java.io.ByteArrayOutputStream;
 
 public class BitmapUtils {
 
+
     public static Bitmap decodeBitmapWithGiveSizeFromResource(Resources res, int resId, int reqWidth, int reqHeight) {
 
         // First decode with inJustDecodeBounds=true to check dimensions
@@ -45,42 +46,6 @@ public class BitmapUtils {
 
         return inSampleSize;
     }
-
-    /*@NonNull
-    public static List<Bitmap> getPoorBitmaps(Context context, List<Post> allPostsList) throws
-            IOException {
-        // create a list of bitmaps
-        List<Bitmap> bitmaps = new ArrayList<>();
-
-        // loop through the posts
-        for (Post post : allPostsList) {
-
-            Bitmap bitmap = Picasso.with(context)
-                    .load(post.getPoorFile().getUrl())
-                    .get();
-
-            bitmaps.add(bitmap);
-
-        }
-        return bitmaps;
-    }
-
-    public static List<String> bitmapsToString(Context context, List<Post> allPostsList) throws
-            IOException {
-
-        List<Bitmap> bitmapsToEncode = getPoorBitmaps(context, allPostsList);
-        List<String> encodedBitmaps = new ArrayList<>();
-
-        for (Bitmap bitmapToEncode : bitmapsToEncode) {
-            String encodingString = BitmapUtils.bitMapToString(bitmapToEncode);
-            LogUtils.v(encodingString);
-            encodedBitmaps.add(encodingString);
-        }
-
-        LogUtils.v(encodedBitmaps.size());
-
-        return encodedBitmaps;
-    }*/
 
     /**
      * @param bitmap
