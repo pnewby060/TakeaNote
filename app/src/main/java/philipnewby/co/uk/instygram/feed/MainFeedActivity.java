@@ -2,13 +2,17 @@ package philipnewby.co.uk.instygram.feed;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
@@ -54,6 +58,7 @@ import philipnewby.co.uk.instygram.R;
 import philipnewby.co.uk.instygram.comment.Comment;
 import philipnewby.co.uk.instygram.comment.CommentActivity;
 import philipnewby.co.uk.instygram.login.LoginActivity;
+import philipnewby.co.uk.instygram.service.RefreshDataService;
 import philipnewby.co.uk.instygram.utils.Queries;
 
 import static philipnewby.co.uk.instygram.Constants.PICK_IMAGE_FROM_MEDIASTORE;
@@ -67,10 +72,8 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
         .OnCommentListener {
 
     private static final int COMMENT_REQ_CODE = 3434;
-
     // our feed adapter
     MainFeedAdapter adapter;
-
     @BindView(R.id.toolbarTitle)
     TextView toolbarTitle;
     @BindView(R.id.emptyListPlaceholder)
@@ -82,6 +85,22 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
     String mCurrentPhotoPath;
     List<Post> localPostsList;
     List<String> profileImages;
+    RefreshDataService dataService;
+
+    // Our handler for received Intents. This will be called whenever an Intent
+    // with an action named "custom-event-name" is broadcasted.
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            LogUtils.d("Broadcast recieved");
+
+            // Get extra data included in the Intent
+            String message = intent.getStringExtra("message");
+            ToastUtils.showLong("Recieved " + message + " from RefreshDataService");
+        }
+    };
+
     // the position in adapter the focus will return on
     private int listPositionIntent;
     // android nougat requirement for photo
@@ -107,9 +126,11 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
 
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         // check permissions
         PermissionUtil.checkGroup(this, new PermissionCallback() {
@@ -139,6 +160,7 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
     }
 
     private void runOnCreate() {
+
         setContentView(R.layout.activity_main_feed);
         ButterKnifeLite.bind(this);
 
@@ -188,13 +210,24 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
 
     @Override
     protected void onResume() {
-        super.onResume();
 
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
 
+        // Register to receive messages.
+        // We are registering an observer (mMessageReceiver) to receive Intents
+        // with actions named "custom-event-name".
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter("custom-event-name"));
+        super.onResume();
 
+    }
+
+    @Override
+    protected void onPause() {
+        // Unregister since the activity is paused.
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+        super.onPause();
     }
 
     public void updateAdapterWithData(List<Post> localPostsList) {
@@ -321,6 +354,23 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
+
+            // start refresh service
+            case R.id.start_service_menu_item:
+
+                ToastUtils.showLong("Starting RefreshDataService");
+                startService(new Intent(MainFeedActivity.this, RefreshDataService.class));
+
+                return true;
+
+            // stop refresh service
+            case R.id.stop_service_menu_item:
+
+                ToastUtils.showLong("Stopping RefreshDataService");
+                LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+                stopService(new Intent(MainFeedActivity.this, RefreshDataService.class));
+
+                return true;
 
             // show current logged in user
             case R.id.show_user_menu_item:
@@ -653,7 +703,9 @@ public class MainFeedActivity extends AppCompatActivity implements MainFeedAdapt
                                         dialog.dismiss();
 
                                         // alert the user it has saved
-                                        ToastUtils.showLong(ParseUser.getCurrentUser().getUsername() + " has created a post on " + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "Instant Gram");
+                                        ToastUtils.showLong(ParseUser.getCurrentUser().getUsername() + " has created a post on " +
+                                                "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" + "" +
+                                                "" + "" + "" + "" + "" + "Instant " + "Gram");
 
                                         recreate();
 

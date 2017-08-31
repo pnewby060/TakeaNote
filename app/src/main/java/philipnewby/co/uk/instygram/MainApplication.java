@@ -17,10 +17,11 @@ import philipnewby.co.uk.instygram.feed.Post;
  */
 public class MainApplication extends Application {
 
-    Picasso picasso;
     public static Typeface proximaNovaRegular;
     public static Typeface proximaNovaBold;
     public static Typeface richardM;
+    Picasso picasso;
+
 
     @Override
     public void onCreate() {
@@ -40,17 +41,11 @@ public class MainApplication extends Application {
                 .clientKey("9116373844ce9829ed19ed86e1e914f59455a490")
                 .server("http://130.211.202.244:80/parse")
                 .enableLocalDataStore();*/
-        picasso = new Picasso.Builder(this)
-                .indicatorsEnabled(true)
-                .build();
+        picasso = new Picasso.Builder(this).indicatorsEnabled(true).build();
         Picasso.setSingletonInstance(picasso);
 
-        Parse.initialize(new Parse.Configuration.Builder(this)
-                .applicationId("3f768f2ccf97fad51fcb95484eafbda74b8a069e")
-                .clientKey("9116373844ce9829ed19ed86e1e914f59455a490")
-                .server("http://130.211.202.244:80/parse")
-                .build());
-
+        Parse.initialize(new Parse.Configuration.Builder(this).applicationId("3f768f2ccf97fad51fcb95484eafbda74b8a069e")
+                .clientKey("9116373844ce9829ed19ed86e1e914f59455a490").server("http://130.211.202.244:80/parse").build());
 
         // local virtual hosting
         /*Parse.initialize(new Parse.Configuration.Builder(this)
